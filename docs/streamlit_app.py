@@ -27,3 +27,7 @@ x1 = y.mark_line().encode(y='wind_speed')
 x2 = y.mark_circle().encode(y='wind_dir')
 c = (x1 + x2).resolve_scale(y='independent')
 st.altair_chart(c, use_container_width=True)
+
+
+st.write("  |  ".join([f"{i}: {wind_direction2txt(i)}"
+                       for i in range(0, 360, 45)]))
