@@ -23,7 +23,9 @@ def date2datetime(str_date: str,
 
     # Override year of tick
     dt = dt.replace(year=current_year)
-    return dt
+
+    # return date as str
+    return str(dt)
 
 
 class WindReader():
@@ -35,22 +37,22 @@ class WindReader():
     def db_file(self):
         return f'{self.db_dir}/winds.csv'
 
-    def read_last_csv(self):
-        '''Read the last CSV that was downloaded
+    def load_db(self):
+        '''Read the CSV that acts as a DB
 
         output:
-            df (DataFrame): Last csv downloaded
+            df (DataFrame): csv as df
         '''
         # Open csv
-        df = pd.read_csv(self.dl_path, encoding='latin1',
-                         on_bad_lines='skip', sep=';')
+        db = pd.read_csv(self.db_file, encoding='latin1', on_bad_lines='skip')
+        db = db.set_index('timestamp')
 
-        return df
+        return db
 
     def append_to_db(self, df):
         '''Append <df> to a csv database. The database has windSpeed and windDir columns indexed by date
-        (eg: "       ,windSpeed ,windDir"
-             "12/11 ,13         ,358")
+        (eg: "timestamp , windSpeed, windDir"
+             "2014/12/11, 13       , 358")
         '''
         # Maybe create dir
         if not os.path.isdir(self.db_dir):
@@ -63,11 +65,11 @@ class WindReader():
         # If DB already exists, merge df and db_file
         else:
             # Read DB
-            db = pd.read_csv(self.db_file, index_col=False)
-            db = db.set_index('timestamp')
+            db = self.load_db()
 
             # Merge DB and the new df
             db = pd.concat([db, df], axis=0)
+            db = db[~db.index.duplicated(keep='last')]
 
             # Save DB
             db.to_csv(self.db_file)
