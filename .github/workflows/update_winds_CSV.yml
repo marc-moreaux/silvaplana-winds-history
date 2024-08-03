@@ -29,7 +29,13 @@ jobs:
       - name: Install dependencies
         run: pip install pandas wget beautifulsoup4
       - name: Run code to DL files
-        run: python src/main.py
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_seconds: 40
+          command: |
+              python src/main.py
 
       - name: Commit DB
         run: |
