@@ -5,6 +5,7 @@ import altair as alt
 
 
 def wind_direction2txt(angle):
+    # Angle in degree to textual orientation
     directions = ['↓ N', '↙ NE', '← E', '↖ SE', '↑ S', '↗ SW', '→ W', '↘ NW']
     return directions[round(angle / 45) % 8]
 
