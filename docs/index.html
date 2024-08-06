@@ -1,36 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>stlite app</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.60.2/build/stlite.css"
-    />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.60.2/build/stlite.js"></script>
+
+<head>
+    <title>Winds in silvaplana</title>
+    <script src="https://cdn.plot.ly/plotly-2.34.0.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="wrapper" style="width:100%;">
+        <div id="plot" style="width:90%;margin:0 auto;height:100%;"></div>
+    </div>
     <script>
-      stlite.mount(
-        {
-            requirements: ["matplotlib"], // Packages to install
-            entrypoint: "streamlit_app.py", // The target file of the `streamlit run` command
-            files: 
-            {
-                "streamlit_app.py": {url: "https://marc-moreaux.github.io/silvaplana-winds-history/streamlit_app.py"},
-                "./db/winds.csv": {url: "https://raw.githubusercontent.com/marc-moreaux/silvaplana-winds-history/main/db/winds.csv"},
-            },
-        },
-        document.getElementById("root"),
-      );
+        let url = "https://raw.githubusercontent.com/marc-moreaux/silvaplana-winds-history/main/db/winds.csv";
+        PLOT = document.getElementById('plot');
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                let rows = data.split("\n");
+                let timestamp = []
+                let wind_speed = []
+                let wind_dir = []
+
+                for (let i = 1; i < rows.length; i++) {
+                    line = rows[i].split(",")
+                    timestamp.push(line[0])
+                    wind_speed.push(line[1])
+                    wind_dir.push(line[2])
+                }
+
+                var trace1 = {
+                    x: timestamp,
+                    y: wind_speed,
+                    name: 'wind speed',
+                    type: 'scatter'
+                };
+
+                var trace2 = {
+                    x: timestamp,
+                    y: wind_dir,
+                    name: 'wind direction',
+                    yaxis: 'y2',
+                    mode: 'markers',
+                    type: 'scatter',
+                };
+        
+                var data = [trace1, trace2];
+                var layout = {
+                    title: 'Winds in silvaplana',
+                    yaxis: {title: 'Wind Speed'},
+                    yaxis2: {
+                        title: 'Wind Direction',
+                        titlefont: {color: 'rgb(148, 103, 189)'},
+                        tickfont: {color: 'rgb(148, 103, 189)'},
+                        overlaying: 'y',
+                        side: 'right'
+                    }
+                };
+
+                Plotly.newPlot(PLOT, data, layout);
+                console.log(wind_dir)
+            })
+           .catch(error => console.log(error));
+
+ 
     </script>
-  </body>
+</body>
+
 </html>
-
-
