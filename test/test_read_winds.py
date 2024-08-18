@@ -6,10 +6,10 @@ from datetime import datetime
 
 def test_date2datetime():
     dt = read_winds.date2datetime("28.07. 14:50", today=datetime(2014, 7, 29))
-    assert dt == datetime(year=2014, month=7, day=28, hour=14, minute=50)
+    assert dt == '2014-07-28 14:50:00'
 
     dt = read_winds.date2datetime("31.12. 23:50", today=datetime(2015, 1, 1))
-    assert dt == datetime(year=2014, month=12, day=31, hour=23, minute=50)
+    assert dt == '2014-12-31 23:50:00'
 
 
 def test_get_new_winds():
