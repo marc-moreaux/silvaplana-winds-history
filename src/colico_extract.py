@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pytesseract
 from datetime import datetime, timedelta
+import pandas as pd
 
 
 wind_plot_ys = (625, 775)
@@ -16,6 +17,7 @@ class Weather_Plot():
                  plot_y0: int = 625,
                  plot_height: int = 150) -> None:
         '''Read the weather plot at <image_path>
+        plot_y0 is 625 for wind and 780 for direction
         '''
         self.weather_plots = cv2.imread(image_path)
         y1 = plot_y0 + plot_height
@@ -62,7 +64,10 @@ class Weather_Plot():
         y_value = int(y_value)
         return y_value
 
-    def extract_plot_values(self, current_date: datetime = datetime(year=2024, month=1, day=1)):
+    def extract_plot_values(self,
+                            current_date: datetime = datetime(
+                                year=2024, month=1, day=1)
+                            ) -> pd.DataFrame:
         '''Extract the values on the plot
         '''
         # Get values
@@ -80,7 +85,11 @@ class Weather_Plot():
         x_axis = [str(dt + (x * timedelta(hours=24)/(len(values)-1)))
                   for x in range(len(values))]
 
-        return values, x_axis
+        # Create a Dataframe out of the datas
+        values_dt = pd.DataFrame({'datetime': x_axis,
+                                 'values': values})
+
+        return values_dt
 
 
 '''
