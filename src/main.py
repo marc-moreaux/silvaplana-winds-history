@@ -1,3 +1,3 @@
-import read_winds
+import wind_reader
 
-read_winds.WindReader().update_db()
+wind_reader.SilvaplanaReader().update_db()
