@@ -35,7 +35,7 @@ def test_extract_plot_real_values():
     '''test the real extraction of values
     '''
     wp = init_example()
-    y, x = wp.extract_plot_values()
+    winds_dt = wp.extract_plot_values()
 
-    plt.plot(x, y)
+    plt.plot(winds_dt['datetime'], winds_dt['values'])
     plt.show()
