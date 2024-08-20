@@ -14,7 +14,7 @@ st.write("Wind in Silvaplana since August 2024")
 st.write("Source: https://www.kitesailing.ch/en/spot/webcam")
 
 # Read db
-db = pd.read_csv('./db/winds.csv', encoding='latin1', on_bad_lines='skip')
+db = pd.read_csv('./db/Silvaplana.csv', encoding='latin1', on_bad_lines='skip')
 db = db.set_index('timestamp')
 
 # Plot DB
