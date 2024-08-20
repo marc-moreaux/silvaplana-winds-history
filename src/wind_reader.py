@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import pandas as pd
 import logging
+import abc
 import re
 import os
 
@@ -10,7 +11,7 @@ import os
 def date2datetime(str_date: str,
                   date_format: str = "%d.%m. %H:%M",
                   today: datetime = datetime.now()):
-    '''convert a str date to datetime and 
+    '''convert a str date to datetime and
     include the current year in the date
     '''
     dt = datetime.strptime(str_date, date_format)
@@ -28,14 +29,16 @@ def date2datetime(str_date: str,
     return str(dt)
 
 
-class WindReader():
-    def __init__(self):
-        self.url = 'https://www.kitesailing.ch/en/spot/webcam'
-        self.db_dir = './db/'
+class WindReader(abc.ABC):
+    db_dir = './db/'
+
+    def __init__(self, wind_station: str, url: str):
+        self.url = url
+        self.wind_station = wind_station
 
     @property
     def db_file(self):
-        return f'{self.db_dir}/winds.csv'
+        return os.path.join(self.db_dir, self.wind_station+'.csv')
 
     def load_db(self):
         '''Read the CSV that acts as a DB
@@ -79,6 +82,18 @@ class WindReader():
         '''
         df = self.read_new_winds()
         self.append_to_db(df)
+
+    @abc.abstractmethod
+    def read_new_winds(self):
+        '''Read new winds from which ever station'''
+        pass
+
+
+class SilvaplanaReader(WindReader):
+
+    def __init__(self):
+        super().__init__(wind_station='Silvaplana',
+                         url='https://www.kitesailing.ch/en/spot/webcam')
 
     def read_new_winds(self):
         '''Read the HTML of kitesailing and get the winds informations of the past 6 hours
