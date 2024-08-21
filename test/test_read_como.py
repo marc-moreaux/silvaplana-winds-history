@@ -3,9 +3,9 @@ import os
 
 
 def test_main():
-    df = como_reader.ComoReader().read_new_winds()
-    wReader = como_reader.ComoReader()
+    wReader = como_reader.ComoReader('Dervio')
     wReader.db_dir = "./db_test/"
+    df = wReader.read_new_winds()
 
     # Delete db_test file if it exists
     if os.path.isfile(wReader.db_file):

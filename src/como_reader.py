@@ -1,33 +1,31 @@
-from wind_reader import WindReader
-from plot_extractor import PlotExtractor
-import logging
-import pandas as pd
-import urllib
 from datetime import datetime
+import logging
+import urllib
 import os
 
-urls = {
-    'Gera_Lario': 'http://rete.centrometeolombardo.com/Como/geralario/immagini/g.png',
-    'Pian_di_Spagna': 'http://rete.centrometeolombardo.com/Como/piandispagna/immagini/g.png',
-    'Gravedona': 'http://rete.centrometeolombardo.com/Como/gravedona/immagini/g.png',
-    'Dongo': 'http://rete.centrometeolombardo.com/Como/dongo/immagini/g.png',
-    'Dervio': 'http://rete.centrometeolombardo.com/Lecco/dervio/immagini/g.png',
-    'Perledo_Cantone': 'http://rete.centrometeolombardo.com/Lecco/perledo_cantone/immagini/g.png',
-    'Ossuccio': 'http://rete.centrometeolombardo.com/Como/ossuccio/immagini/g.png',
-    'Oliveto_Lario': 'http://rete.centrometeolombardo.com/Lecco/olivetolario/immagini/g.png',
-    'Mandello': 'http://rete.centrometeolombardo.com/Lecco/mandello/immagini/g.png',
-    'Lecco': 'http://rete.centrometeolombardo.com/Lecco/lecco/immagini/g.png',
-    'Garlate': 'http://rete.centrometeolombardo.com/Lecco/garlate/immagini/g.png',
-}
+import pandas as pd
 
-wind_sation = 'Dervio'
-url = 'http://rete.centrometeolombardo.com/Lecco/dervio/immagini/g.png'
+from src.wind_reader import WindReader
+from src.plot_extractor import PlotExtractor
 
 
 class ComoReader(WindReader):
-    def __init__(self):
-        super().__init__(wind_station=wind_sation,
-                         url=url)
+    def __init__(self, wind_station):
+        urls = {
+            'Gera_Lario': 'http://rete.centrometeolombardo.com/Como/geralario/immagini/g.png',
+            'Pian_di_Spagna': 'http://rete.centrometeolombardo.com/Como/piandispagna/immagini/g.png',
+            'Gravedona': 'http://rete.centrometeolombardo.com/Como/gravedona/immagini/g.png',
+            'Dongo': 'http://rete.centrometeolombardo.com/Como/dongo/immagini/g.png',
+            'Dervio': 'http://rete.centrometeolombardo.com/Lecco/dervio/immagini/g.png',
+            'Perledo_Cantone': 'http://rete.centrometeolombardo.com/Lecco/perledo_cantone/immagini/g.png',
+            'Ossuccio': 'http://rete.centrometeolombardo.com/Como/ossuccio/immagini/g.png',
+            'Oliveto_Lario': 'http://rete.centrometeolombardo.com/Lecco/olivetolario/immagini/g.png',
+            'Mandello': 'http://rete.centrometeolombardo.com/Lecco/mandello/immagini/g.png',
+            'Lecco': 'http://rete.centrometeolombardo.com/Lecco/lecco/immagini/g.png',
+            'Garlate': 'http://rete.centrometeolombardo.com/Lecco/garlate/immagini/g.png',
+        }
+        url = urls[wind_station]
+        super().__init__(wind_station=wind_station, url=url)
 
     def read_new_winds(self):
         '''Download image of new winds from rete.centrometeolombardo,
