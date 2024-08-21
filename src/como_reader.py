@@ -5,8 +5,8 @@ import os
 
 import pandas as pd
 
-from src.wind_reader import WindReader
-from src.plot_extractor import PlotExtractor
+from .wind_reader import WindReader
+from .plot_extractor import PlotExtractor
 
 
 class ComoReader(WindReader):
@@ -38,8 +38,8 @@ class ComoReader(WindReader):
         os.makedirs(img_dir, exist_ok=True)
 
         # Read image
-        logging.info(f'Downloading image from : {url}')
-        with urllib.request.urlopen(url) as f:
+        logging.info(f'Downloading image from : {self.url}')
+        with urllib.request.urlopen(self.url) as f:
             img = f.read()
 
         # Save image
