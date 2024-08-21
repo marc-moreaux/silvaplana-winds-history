@@ -1,3 +1,3 @@
 from como_reader import ComoReader
 
-ComoReader.update_db()
+ComoReader().update_db()
