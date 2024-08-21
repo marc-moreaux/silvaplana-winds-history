@@ -31,12 +31,12 @@ jobs:
           retry_on: error
           timeout_seconds: 10
           command: |
-            python src/main_colico.py
+            python src/main_como.py
 
       - name: Commit DB
         run: |
           git config --global user.name 'Marc Automated Action'
           git config --global user.email 'marc-moreaux@users.noreply.github.com'
           git add db/*
-          git commit -m "Automated Colico DB update"
+          git commit -m "Automated Como DB update"
           git push
