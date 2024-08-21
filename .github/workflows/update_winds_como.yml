@@ -37,7 +37,7 @@ jobs:
           retry_on: error
           timeout_seconds: 10
           command: |
-            python src/main_como.py
+            python scripts/main_como.py
 
       - name: Commit DB
         run: |

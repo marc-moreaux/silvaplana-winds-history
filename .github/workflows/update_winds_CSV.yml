@@ -34,7 +34,7 @@ jobs:
           retry_on: error
           timeout_seconds: 40
           command: |
-            python src/main.py
+            python scripts/main_silvaplana.py
 
       - name: Commit DB
         run: |
