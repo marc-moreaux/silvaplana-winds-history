@@ -24,6 +24,12 @@ jobs:
           pwd
           ls
 
+      - name: Install Tesseract
+        run: sudo apt-get install tesseract-ocr
+
+      - name: Install dependencies
+        run: pip install pandas beautifulsoup4 pytesseract opencv-python
+
       - name: Run code to DL files
         uses: nick-fields/retry@v2
         with:
