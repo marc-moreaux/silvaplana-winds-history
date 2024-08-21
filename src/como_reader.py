@@ -1,5 +1,5 @@
 from src.wind_reader import WindReader
-from src.colico_extract import Weather_Plot
+from src.colico_extract import PlotExtractor
 import logging
 import pandas as pd
 import urllib
@@ -51,11 +51,11 @@ class ComoReader(WindReader):
 
         # Extract wind speed and direction from image
         logging.info(f'Extract wind speed and direction from image')
-        wp = Weather_Plot(img_path)
+        wp = PlotExtractor(img_path)
         winds_df = wp.extract_plot_values()
         wind_speed = (winds_df['values'] * 100).astype(int).astype(float) / 100
 
-        dp = Weather_Plot(img_path, plot_y0=780)
+        dp = PlotExtractor(img_path, plot_y0=780)
         direction_df = dp.extract_plot_values()
         wind_dir = direction_df['values'].astype(int)
 

@@ -1,11 +1,11 @@
-from src.colico_extract import Weather_Plot
+from src.colico_extract import PlotExtractor
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 
-def init_example() -> Weather_Plot:
+def init_example() -> PlotExtractor:
     test_plot = 'db/colico/20240805-2112.png'
-    wp = Weather_Plot(test_plot)
+    wp = PlotExtractor(test_plot)
     return wp
 
 
