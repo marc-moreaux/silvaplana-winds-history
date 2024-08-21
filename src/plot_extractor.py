@@ -86,7 +86,7 @@ class PlotExtractor():
         dt = dt.replace(year=current_date.year,
                         month=current_date.month,
                         day=current_date.day)
-        x_axis = [str(dt + (x * timedelta(hours=24)/(len(values)-1)))
+        x_axis = [(dt + (x * timedelta(hours=24)/(len(values)-1))).strftime("%Y-%m-%d %H:%M:%S")
                   for x in range(len(values))]
 
         # Create a Dataframe out of the datas
