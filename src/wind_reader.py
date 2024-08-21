@@ -1,11 +1,12 @@
-from datetime import datetime
-from bs4 import BeautifulSoup
-import urllib.request
-import pandas as pd
 import logging
 import abc
 import re
 import os
+
+from datetime import datetime
+from bs4 import BeautifulSoup
+import urllib.request
+import pandas as pd
 
 
 def date2datetime(str_date: str,
