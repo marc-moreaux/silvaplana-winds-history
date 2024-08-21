@@ -1,5 +1,5 @@
-from src.wind_reader import WindReader
-from src.colico_extract import PlotExtractor
+from wind_reader import WindReader
+from plot_extractor import PlotExtractor
 import logging
 import pandas as pd
 import urllib
