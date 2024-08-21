@@ -1,11 +1,11 @@
+from datetime import datetime, timedelta
 from typing import List
 import re
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-import pytesseract
-from datetime import datetime, timedelta
+
 import pandas as pd
+import numpy as np
+import pytesseract
+import cv2
 
 
 wind_plot_ys = (625, 775)
