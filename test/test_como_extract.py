@@ -1,5 +1,6 @@
 from src.colico_extract import Weather_Plot
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
 
 def init_example() -> Weather_Plot:
@@ -14,7 +15,6 @@ def test_plot_extract():
     wp = init_example()
     values = wp._extract_plot_values()
     assert values[0] == 1 - (67 / wp.plot.shape[0])
-    return wp
 
 
 def test_read_xs():
@@ -35,7 +35,10 @@ def test_extract_plot_real_values():
     '''test the real extraction of values
     '''
     wp = init_example()
-    winds_dt = wp.extract_plot_values()
+    df = wp.extract_plot_values()
+    dt = datetime.now() - timedelta(days=1)
+    dt = dt.replace(hour=23, minute=10, second=0, microsecond=0)
+    assert df['timestamp'][0] == str(dt)
 
-    plt.plot(winds_dt['datetime'], winds_dt['values'])
+    plt.plot(df['timestamp'], df['values'])
     plt.show()

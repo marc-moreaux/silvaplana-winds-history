@@ -65,8 +65,7 @@ class Weather_Plot():
         return y_value
 
     def extract_plot_values(self,
-                            current_date: datetime = datetime(
-                                year=2024, month=1, day=1)
+                            current_date: datetime = datetime.now() - timedelta(days=1)
                             ) -> pd.DataFrame:
         '''Extract the values on the plot
         '''
@@ -86,10 +85,17 @@ class Weather_Plot():
                   for x in range(len(values))]
 
         # Create a Dataframe out of the datas
-        values_dt = pd.DataFrame({'datetime': x_axis,
-                                 'values': values})
+        df = pd.DataFrame({'timestamp': x_axis,
+                           'values': values})
 
-        return values_dt
+        # Resample the data to 10 minutes data
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        df = df.set_index('timestamp')
+        df = df.resample('10min').mean()
+        df = df.reset_index()
+        df['timestamp'] = df['timestamp'].apply(lambda ts: str(ts))
+
+        return df
 
 
 '''
