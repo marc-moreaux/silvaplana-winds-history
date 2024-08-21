@@ -1,4 +1,4 @@
-from src.colico_extract import PlotExtractor
+from src.plot_extractor import PlotExtractor
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
