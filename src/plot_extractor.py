@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import List
+import logging
 import re
 
 import pandas as pd
@@ -70,13 +71,17 @@ class PlotExtractor():
         '''Extract the values on the plot
         '''
         # Get values
+        logging.info("Extracting values on the plot")
         max_y = self.read_y_axis()
         values = self._extract_plot_values()
         values = np.array(values) * max_y
+        logging.info(f"Extracted {len(values)} values from the plot")
 
         # Create x axis as dt
+        logging.info("Extract timestamps from the plot")
         date_format = "%H:%M"
         x_value = self.read_x_axis()[0]
+        logging.info(f"1st date found in plot: {x_value}")
         dt = datetime.strptime(x_value, date_format)
         dt = dt.replace(year=current_date.year,
                         month=current_date.month,
@@ -89,6 +94,7 @@ class PlotExtractor():
                            'values': values})
 
         # Resample the data to 10 minutes data
+        logging.info(f"Resampling to 10 minutes data ({df['timestamp'][0]})")
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         df = df.set_index('timestamp')
         df = df.resample('10min').mean()
