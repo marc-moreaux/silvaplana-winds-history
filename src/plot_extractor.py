@@ -15,22 +15,26 @@ wind_plot_ys = (625, 775)
 class PlotExtractor():
 
     def __init__(self, image_path: str,
-                 plot_y0: int = 625,
-                 plot_height: int = 150) -> None:
+                 bbox_plot: List[int] = (24, 633, 274, 749),
+                 bbox_y_label: List[int] = (3, 625, 20, 640),
+                 bbox_x_label: List[int] = (7, 755, -1, 770),
+                 ) -> None:
         '''Read the weather plot at <image_path>
-        plot_y0 is 625 for wind and 780 for direction
+        bboxes should be in (left, top, right, bottom) format
         '''
         self.image = cv2.imread(image_path)
-        y1 = plot_y0 + plot_height
-        self.full_plot = self.image[plot_y0: y1]
-        self.extract_plot_and_axis()
 
-    def extract_plot_and_axis(self) -> None:
-        '''Extract the image of the axis from the plot
-        '''
-        self.img_xs = self.full_plot[-21:]
-        self.img_ys = self.full_plot[:-21, :22]
-        self.plot = self.full_plot[8:-26, 24:-14]
+        # Extract plot from full image
+        left, top, right, bottom = bbox_plot
+        self.plot = self.image[top:bottom, left:right]
+
+        # Extract x annotation image
+        left, top, right, bottom = bbox_x_label
+        self.img_xs = self.image[top:bottom, left:right]
+
+        # Extract y annotation image
+        left, top, right, bottom = bbox_y_label
+        self.img_ys = self.image[top:bottom, left:right]
 
     def _extract_plot_value_at_x(self, x: int) -> float:
         '''Get the value of a function at x on a <plot>
@@ -52,6 +56,7 @@ class PlotExtractor():
         config = '--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789:'
         xs_values = pytesseract.image_to_string(
             self.img_xs, lang='eng', config=config)
+        logging.info(f'Found {xs_values} on the x axis')
         xs_values = re.findall(r"(\d{1,2}:\d\d)", xs_values)
         return xs_values
 
@@ -61,6 +66,7 @@ class PlotExtractor():
         config = '--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789:'
         y_value = pytesseract.image_to_string(
             self.img_ys[:20], lang='eng', config=config)
+        logging.info(f'Found {y_value} on the y axis')
         y_value = re.findall(r"\d+", y_value)[0]
         y_value = int(y_value)
         return y_value

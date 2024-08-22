@@ -42,3 +42,41 @@ def test_extract_plot_real_values():
 
     plt.plot(df['timestamp'], df['values'])
     plt.show()
+
+
+def test_image_show_all():
+    '''Show the images extracted
+    '''
+    wp = init_example()
+    plt.imshow(wp.image)
+    plt.show()
+
+
+def test_image_extraction_speed():
+    '''Show the images extracted
+    '''
+    wp = init_example()
+    fig, ax = plt.subplots(2, 2)
+    ax[0, 0].imshow(wp.image)
+    ax[0, 1].imshow(wp.plot)
+    ax[1, 0].imshow(wp.img_xs)
+    ax[1, 1].imshow(wp.img_ys)
+    plt.show()
+
+
+def test_image_extraction_dir():
+    '''Show the images extracted
+    '''
+    test_plot = 'db/colico/20240805-2112.png'
+    wp = PlotExtractor(
+        test_plot,
+        bbox_plot=(24, 788, 274, 904),
+        bbox_y_label=(0, 780, 20, 800),
+        bbox_x_label=(7, 910, -1, 925))
+
+    fig, ax = plt.subplots(2, 2)
+    ax[0, 0].imshow(wp.image)
+    ax[0, 1].imshow(wp.plot)
+    ax[1, 0].imshow(wp.img_xs)
+    ax[1, 1].imshow(wp.img_ys)
+    plt.show()
