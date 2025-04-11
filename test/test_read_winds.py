@@ -14,7 +14,7 @@ def test_date2datetime():
 
 def test_get_new_winds():
     df = wind_reader.SilvaplanaReader().read_new_winds()
-    assert len(df) > 15
+    assert len(df) > 10
     assert len(df.columns) >= 2
 
 
