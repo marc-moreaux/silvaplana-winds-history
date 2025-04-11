@@ -18,10 +18,14 @@ class PlotExtractor():
                  bbox_plot: List[int] = (24, 633, 274, 749),
                  bbox_y_label: List[int] = (3, 625, 20, 640),
                  bbox_x_label: List[int] = (7, 755, -1, 770),
+                 x_format: str = r"(\d{1,2}:\d\d)",
+                 y_format: str = r"(\d+)",
+                 date_format="%H:%M",
                  ) -> None:
         '''Read the weather plot at <image_path>
         bboxes should be in (left, top, right, bottom) format
         '''
+        self._image_path = image_path
         self.image = cv2.imread(image_path)
 
         # Extract plot from full image
@@ -29,10 +33,15 @@ class PlotExtractor():
         self.plot = self.image[top:bottom, left:right]
 
         # Extract x annotation image
+        self._bbox_x_label = bbox_x_label
+        self._x_format = x_format
         left, top, right, bottom = bbox_x_label
         self.img_xs = self.image[top:bottom, left:right]
 
         # Extract y annotation image
+        self._bbox_y_label = bbox_y_label
+        self._y_format = y_format
+        self._date_format = date_format
         left, top, right, bottom = bbox_y_label
         self.img_ys = self.image[top:bottom, left:right]
 
@@ -53,11 +62,12 @@ class PlotExtractor():
     def read_x_axis(self) -> List[str]:
         ''' Read values on on the x axis
         '''
-        config = '--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789:'
+        config = '--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789:'
+        config = '-c tessedit_char_whitelist=0123456789:'
         xs_values = pytesseract.image_to_string(
             self.img_xs, lang='eng', config=config)
         logging.info(f'Found {xs_values} on the x axis')
-        xs_values = re.findall(r"(\d{1,2}:\d\d)", xs_values)
+        xs_values = re.findall(self._x_format, xs_values)
         return xs_values
 
     def read_y_axis(self) -> int:
@@ -67,7 +77,7 @@ class PlotExtractor():
         y_value = pytesseract.image_to_string(
             self.img_ys[:20], lang='eng', config=config)
         logging.info(f'Found {y_value} on the y axis')
-        y_value = re.findall(r"\d+", y_value)[0]
+        y_value = re.findall(self._y_format, y_value)[0]
         y_value = int(y_value)
         return y_value
 
@@ -85,10 +95,9 @@ class PlotExtractor():
 
         # Create x axis as dt
         logging.info("Extract timestamps from the plot")
-        date_format = "%H:%M"
         x_value = self.read_x_axis()[0]
         logging.info(f"1st date found in plot: {x_value}")
-        dt = datetime.strptime(x_value, date_format)
+        dt = datetime.strptime(x_value, self._date_format)
         dt = dt.replace(year=current_date.year,
                         month=current_date.month,
                         day=current_date.day)

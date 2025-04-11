@@ -16,3 +16,15 @@ def test_main():
     wReader.append_to_db(df)
     db = wReader.load_db()
     assert len(df) == len(db)
+
+
+def test_all_cities():
+    '''Test extracting cities one after the other
+    '''
+    cities = como_reader.parameters.keys()
+    for city in cities:
+        print(f'trying to get data from {city}')
+        wReader = como_reader.ComoReader(city)
+        wReader.db_dir = "./db_test/"
+        df = wReader.read_new_winds()
+        wReader.append_to_db(df)

@@ -9,16 +9,28 @@ from .wind_reader import WindReader
 from .plot_extractor import PlotExtractor
 
 bbox_conf1 = {
-    'wind_speed': [(24, 633, 274, 749), (3, 625, 20, 640), (7, 755, -1, 770)],
-    'wind_dir': [(24, 788, 274, 904), (0, 780, 20, 800), (7, 910, -1, 925)]
+    'wind_speed': {'bbox_plot': (24, 633, 274, 749),
+                   'bbox_y_label': (3, 625, 20, 640),
+                   'bbox_x_label':  (7, 755, -1, 770),
+                   'x_format': r"(\d{1,2}:\d\d)",
+                   'date_format': r"%H:%M"},
+    'wind_dir': {'bbox_plot': (24, 788, 274, 904),
+                 'bbox_y_label': (0, 780, 20, 800),
+                 'bbox_x_label':  (7, 910, -1, 925),
+                 'x_format': r"(\d{1,2}:\d\d)",
+                 'date_format': r"%H:%M"},
 }
 bbox_conf2 = {
-    'wind_speed': [(24, 633, 274, 749), (3, 625, 20, 640), (7, 755, -1, 770)],
-    'wind_dir': [(24, 788, 274, 904), (0, 780, 20, 800), (7, 910, -1, 925)]
-}
-bbox_conf3 = {
-    'wind_speed': [(24, 633, 274, 749), (3, 625, 20, 640), (7, 755, -1, 770)],
-    'wind_dir': [(24, 788, 274, 904), (0, 780, 20, 800), (7, 910, -1, 925)]
+    'wind_speed': {'bbox_plot': (39, 622, 278, 749),
+                   'bbox_y_label': (3, 616, 35, 630),
+                   'bbox_x_label': (7, 757, -1, 775),
+                   'x_format': r"(\d{2})",
+                   'date_format': r"%H"},
+    'wind_dir': {'bbox_plot': (39, 778, 279, 906),
+                 'bbox_y_label': (0, 772, 35, 784),
+                 'bbox_x_label':  (7, 915, -1, 927),
+                 'x_format': r"(\d{2})",
+                 'date_format': r"%H"},
 }
 parameters = {
     'Gera_Lario': {
@@ -98,18 +110,14 @@ class ComoReader(WindReader):
         logging.info(f'Extract wind speed and direction from image')
         wp = PlotExtractor(
             img_path,
-            bbox_plot=self.bbox_conf['wind_speed'][0],
-            bbox_y_label=self.bbox_conf['wind_speed'][1],
-            bbox_x_label=self.bbox_conf['wind_speed'][2],
+            **self.bbox_conf['wind_speed']
         )
         winds_df = wp.extract_plot_values()
         wind_speed = (winds_df['values'] * 100).astype(int).astype(float) / 100
 
         dp = PlotExtractor(
             img_path,
-            bbox_plot=self.bbox_conf['wind_dir'][0],
-            bbox_y_label=self.bbox_conf['wind_dir'][1],
-            bbox_x_label=self.bbox_conf['wind_dir'][2],
+            **self.bbox_conf['wind_dir']
         )
         direction_df = dp.extract_plot_values()
         wind_dir = direction_df['values'].astype(int)
