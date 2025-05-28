@@ -107,7 +107,8 @@ class SilvaplanaReader(WindReader):
 
         # Get wind speed, wind direction and timestamps
         logging.info(f"Extracting winds info")
-        timestamps = eval(re.findall(r"labels: \[([^]]*)\]", html)[0])
+        html_0 = html.replace('\n', '')
+        timestamps = eval(re.findall(r"categories: \[([^]]*)\]", html_0)[0])
         timestamps = list(map(date2datetime, timestamps))
         wind_dir = eval(re.findall(r"windDirection = \[([^]]*)\]", html)[0])
         wind_speed = eval(re.findall(r"data: \[([^]]*)\]", html)[0])
