@@ -11,7 +11,7 @@
         <div id="plot" style="width:90%;margin:0 auto;height:100%;"></div>
     </div>
     <script>
-        let url = "https://raw.githubusercontent.com/marc-moreaux/silvaplana-winds-history/main/db/winds.csv";
+        let url = "https://raw.githubusercontent.com/marc-moreaux/silvaplana-winds-history/main/db/Silvaplana.csv";
         PLOT = document.getElementById('plot');
 
         fetch(url)
@@ -20,6 +20,8 @@
                 let rows = data.split("\n");
                 let timestamp = []
                 let wind_speed = []
+                let wind_kite = []
+                let wind_wing = []
                 let wind_dir = []
 
                 for (let i = 1; i < rows.length; i++) {
@@ -27,14 +29,56 @@
                     timestamp.push(line[0])
                     wind_speed.push(line[1])
                     wind_dir.push(line[2])
+
+                    if(line[1] > 25 && line[2] > 200 && line[2] < 300){
+                        wind_kite.push(line[1])
+                        wind_wing.push(null)
+                    } else if(line[1] > 18){
+                        wind_kite.push(null)
+                        wind_wing.push(line[1])
+                    }
+                    else{
+                        wind_kite.push(null)
+                        wind_wing.push(null)
+                    }
                 }
 
                 var trace1 = {
                     x: timestamp,
                     y: wind_speed,
                     name: 'wind speed',
-                    type: 'scatter'
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: {
+                        color: 'light blue',
+                        width: 2
+                    }
                 };
+
+                var trace1_kite = {
+                    x: timestamp,
+                    y: wind_kite,
+                    name: 'wind speed kite',
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: {
+                        color: 'green',
+                        width: 3
+                    }
+                };
+
+                var trace1_wing = {
+                    x: timestamp,
+                    y: wind_wing,
+                    name: 'wind speed wing',
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: {
+                        color: 'orange',
+                        width: 3
+                    }
+                };
+
 
                 var trace2 = {
                     x: timestamp,
@@ -43,9 +87,14 @@
                     yaxis: 'y2',
                     mode: 'markers',
                     type: 'scatter',
+                    marker: {
+                        size: 2,
+                        color: 'orange'
+                    }
+
                 };
-        
-                var data = [trace1, trace2];
+
+                var data = [trace1, trace1_kite, trace1_wing, trace2];
                 var layout = {
                     title: 'Winds in silvaplana',
                     yaxis: {title: 'Wind Speed'},
