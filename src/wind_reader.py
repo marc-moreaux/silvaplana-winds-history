@@ -41,19 +41,20 @@ class WindReader(abc.ABC):
     def db_file(self):
         return os.path.join(self.db_dir, self.wind_station+'.csv')
 
-    def load_db(self):
+    def load_db(self) -> pd.DataFrame:
         '''Read the CSV that acts as a DB
 
         output:
             df (DataFrame): csv as df
         '''
         # Open csv
-        db = pd.read_csv(self.db_file, encoding='latin1', on_bad_lines='skip')
+        db: pd.DataFrame = pd.read_csv(
+            self.db_file, encoding='latin1', on_bad_lines='skip')
         db = db.set_index('timestamp')
 
         return db
 
-    def append_to_db(self, df):
+    def append_to_db(self, df: pd.DataFrame):
         '''Append <df> to a csv database. The database has windSpeed and windDir columns indexed by date
         (eg: "timestamp , windSpeed, windDir"
              "2014/12/11, 13       , 358")
@@ -85,7 +86,7 @@ class WindReader(abc.ABC):
         self.append_to_db(df)
 
     @abc.abstractmethod
-    def read_new_winds(self):
+    def read_new_winds(self) -> pd.DataFrame:
         '''Read new winds from which ever station'''
         pass
 

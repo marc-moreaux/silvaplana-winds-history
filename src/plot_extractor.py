@@ -15,9 +15,9 @@ wind_plot_ys = (625, 775)
 class PlotExtractor():
 
     def __init__(self, image_path: str,
-                 bbox_plot: List[int] = (24, 633, 274, 749),
-                 bbox_y_label: List[int] = (3, 625, 20, 640),
-                 bbox_x_label: List[int] = (7, 755, -1, 770),
+                 bbox_plot: tuple[int, int, int, int] = (24, 633, 274, 749),
+                 bbox_y_label: tuple[int, int, int, int] = (3, 625, 20, 640),
+                 bbox_x_label: tuple[int, int, int, int] = (7, 755, -1, 770),
                  x_format: str = r"(\d{1,2}:\d\d)",
                  y_format: str = r"(\d+)",
                  date_format="%H:%M",
