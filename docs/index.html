@@ -23,6 +23,8 @@
                 let wind_kite = []
                 let wind_wing = []
                 let wind_dir = []
+                let min_wind_kite = 25
+                let min_wind_wing = 20
 
                 for (let i = 1; i < rows.length; i++) {
                     line = rows[i].split(",")
@@ -30,10 +32,10 @@
                     wind_speed.push(line[1])
                     wind_dir.push(line[2])
 
-                    if(line[1] > 25 && line[2] > 200 && line[2] < 300){
+                    if(line[1] > min_wind_kite && line[2] > 200 && line[2] < 300){
                         wind_kite.push(line[1])
-                        wind_wing.push(null)
-                    } else if(line[1] > 18){
+                        wind_wing.push(line[1])
+                    } else if(line[1] > min_wind_wing){
                         wind_kite.push(null)
                         wind_wing.push(line[1])
                     }
@@ -94,7 +96,7 @@
 
                 };
 
-                var data = [trace1, trace1_kite, trace1_wing, trace2];
+                var data = [trace1, trace1_wing, trace1_kite, trace2];
                 var layout = {
                     title: 'Winds in silvaplana',
                     yaxis: {title: 'Wind Speed'},
